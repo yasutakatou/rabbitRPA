@@ -22,3 +22,9 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
  - very simple use
  - (Of course) free!
 
+# structure
+
+1. one execute file include all binary and dll files.
+2. when execute this, extract execute file for RPA, and OpenCV dll files.
+3. and then, execute RPA binary depend for OpenCV, Your operation recorded or replayed!
+
