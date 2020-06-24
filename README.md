@@ -6,3 +6,13 @@
 
 lovely Lepus brachyurus!<br>
 
+# solution
+
+You try to automation on windows gui operation, you might use RPA tool. 
+after, you will setup this tool requirement for execute.
+install, config file customize, and depend tool and more.
+### I wonder why, RPA tool are too fat.
+I want do old installer to automate, only once.
+But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
+
+# features
