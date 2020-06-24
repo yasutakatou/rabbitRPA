@@ -28,3 +28,21 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 2. when execute this, extract execute file for RPA, and OpenCV dll files.
 3. and then, execute RPA binary depend for OpenCV, Your operation recorded or replayed!
 
+# options
+
+*note) this options give to RPA binary(do.exe) as is. therefore, do.exe's options same too.*
+
+|option name|default value|detail|
+|:---|:---|:---|
+-list|false|listing window titiles and exit|
+-replay|false|replay mode (true is enable)|
+-record|true|recording mode (true is enable)|
+-export|output.tsv|export file name|
+-import|input.tsv|import file name|
+-debug|false|debug mode (true is enable)|
+-threshold|0.5|same window threshold|
+-move|50|mouse move record threshold|
+-try|10|error and try counter|
+-wait|100|loop wait Millisecond|
+-exitCode|27|recording mode to exit ascii key code|
+-tmpDir|tmp|temporary directory name|
