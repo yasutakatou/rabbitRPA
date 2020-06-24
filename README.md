@@ -16,3 +16,9 @@ I want do old installer to automate, only once.
 But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 
 # features
+
+ - one binary (it's not perfect)
+ - light weight
+ - very simple use
+ - (Of course) free!
+
