@@ -120,7 +120,7 @@ go build rabbitRPA.go
  - If exists same title window, doing on smaller window handle.
 
 Because search partial of window title.<br>
-When focus some tool, this tool's window title auto changed, this tool can't focus this.<br>
+When focus some tool, this tool's window title auto changed, this tool can't focus that.<br>
 Then, search partial.<br>
 
 # copyright
