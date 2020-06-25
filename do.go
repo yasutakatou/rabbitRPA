@@ -661,7 +661,6 @@ func GetMD5Hash(text string) string {
 func addHistory(device, strs string) {
 	if len(strs) > 0 {
 		activeWindow := getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
-		fmt.Println(activeWindow)
 		if foreTitle != activeWindow {
 			foreTitle = activeWindow
 			History = append(History, historyData{Device: "active", Params: foreTitle})
