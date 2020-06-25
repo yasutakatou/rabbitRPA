@@ -6,6 +6,8 @@
 
 lovely Lepus brachyurus!<br>
 
+### So far, it only works on Windows.
+
 # solution
 
 You try to automation on windows gui operation, you might use RPA tool. 
