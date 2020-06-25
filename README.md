@@ -36,6 +36,11 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 
 # installation
 
+download binary from [release page](https://github.com/yasutakatou/rabbitRPA/releases).<br>
+save binary file, copy to entryed execute path directory.<br>
+
+## another
+
 this tool depend gocv and statik.<br>
 
 [GoCV](https://github.com/hybridgroup/gocv)<br>
@@ -101,6 +106,14 @@ Finally, package everything up.
 ```
 go build rabbitRPA.go
 ```
+
+## uninstall
+
+```
+delete that binarys.
+```
+
+del or rm command. *(it's simple!)*
 
 # options
 
