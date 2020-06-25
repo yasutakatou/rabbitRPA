@@ -115,6 +115,14 @@ go build rabbitRPA.go
 -exitCode|27|recording mode to exit ascii key code|
 -tmpDir|tmp|temporary directory name|
 
+# Problem
+
+ - If exists same title window, doing on smaller window handle.
+
+Because search partial of window title.<br>
+When focus some tool, this tool's window title auto changed, this tool can't focus this.<br>
+Then, search partial.<br>
+
 # copyright
 
 (Probably) the world's first one file RPA tool impremented by Golang!<br>
