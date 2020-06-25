@@ -46,3 +46,14 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 -wait|100|loop wait Millisecond|
 -exitCode|27|recording mode to exit ascii key code|
 -tmpDir|tmp|temporary directory name|
+
+# copyright
+
+(Probably) the world's first one file RPA tool impremented by Golang!
+Copyright (c) 2020 yasutakatou
+
+# license
+
+3-clause BSD License
+ and
+Apache License Version 2.0
