@@ -224,6 +224,9 @@ func replayMode(importFile string) {
 			strs := strings.Split(History[i].Params, ";")
 
 			origFilename := getNowFilename()
+			if Exists(origFilename) == false {
+				break
+			}
 			matImage := gocv.IMRead(origFilename, gocv.IMReadGrayScale)
 
 			targetX := 0
@@ -240,9 +243,15 @@ func replayMode(importFile string) {
 				targetY, _ = strconv.Atoi(strs[2])
 			}
 
-			fmt.Println("origFilename: ", origFilename, " partImage: ", partImage)
+			if Debug == true {
+				fmt.Println("origFilename: ", origFilename, " partImage: ", partImage)
+			}
 
+			if Exists(partImage) == false {
+				break
+			}
 			matTemplate := gocv.IMRead(partImage, gocv.IMReadGrayScale)
+
 			matResult := gocv.NewMat()
 			mask := gocv.NewMat()
 			gocv.MatchTemplate(matImage, matTemplate, &matResult, gocv.TmCcoeffNormed, mask)
@@ -613,7 +622,14 @@ func addMouseAction(evButton, evX, evY int) {
 		partFileName, _ = searchHash(partHash, false)
 	}
 
+	if Exists(allFilename) == false {
+		return
+	}
 	matImage := gocv.IMRead(allFilename, gocv.IMReadGrayScale)
+
+	if Exists(partFileName) == false {
+		return
+	}
 	matTemplate := gocv.IMRead(partFileName, gocv.IMReadGrayScale)
 	matResult := gocv.NewMat()
 	mask := gocv.NewMat()

@@ -48,6 +48,8 @@ func main() {
 func Execmd(command string) {
 	cmd := exec.Command("cmd", "/C", command)
 	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 	cmd.Run()
 }
 
