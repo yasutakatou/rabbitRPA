@@ -1,3 +1,10 @@
+/**
+ * (Probably) the world's first one file RPA tool impremented by Golang!
+ *
+ * @author    yasutakatou
+ * @copyright 2020 yasutakatou
+ * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache-2.0 , 3-clause BSD License
+ */
 package main
 
 import (
