@@ -8,6 +8,10 @@ lovely Lepus brachyurus!<br>
 
 ### So far, it only works on Windows.
 
+# demo
+
+![demo](https://github.com/yasutakatou/rabbitRPA/blob/pics/rabbitRPA.gif)
+
 # solution
 
 You try to automation on windows gui operation, you might use RPA tool. 
