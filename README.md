@@ -34,6 +34,53 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 2. when execute this, extract execute file for RPA, and OpenCV dll files.
 3. and then, execute RPA binary depend for OpenCV, Your operation recorded or replayed!
 
+
+# algorithm
+
+this tool have two functions roughly. It's Record or Replay.<br>
+
+## Record
+
+When no option, tool is Record mode.<br>
+
+```
+rabbitRPA.exe
+```
+
+tool executed and create require files, after follow message.
+
+
+```
+ - - recording start! you want to end this mode, key press ascii code (%d) - -
+```
+
+until input exit key code, your operation recorded.<br>
+(default exit key code is 27[Escape Key].)<br>
+
+After input exit key code, your operation is recorded tsv file and pictures.<br>
+
+tsv file include target window title, move value mouse, click position.<br>
+pictures include all screen, and target window capture.<br>
+tool calculates the picture's difference.<br>
+Therefore, If target windows moved another position, that position adjust.<br>
+
+<br>
+
+## Replay
+
+Replay the operation using the file you just used. set you options. <br>
+
+```
+rabbitRPA.exe -replay -import=output.tsv
+```
+
+"-replay" is replay mode option.<br>
+"-import" is exported tsv file for record mode.<br>
+
+### your record will replay!
+
+[See here for other options.](https://github.com/yasutakatou/rabbitRPA#options)
+
 # installation
 
 download binary from [release page](https://github.com/yasutakatou/rabbitRPA/releases).<br>
