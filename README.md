@@ -56,11 +56,11 @@ tool executed and create require files, after follow message.
 until input exit key code, your operation recorded.<br>
 (default exit key code is **27[Escape Key]**.)<br>
 
-After input exit key code, your operation is recorded tsv file and pictures.<br>
+After input exit key code, your operation is recorded tsv file and captures.<br>
 
 tsv file include target window title, move value mouse, click position.<br>
-pictures include all screen, and target window capture.<br>
-*tool calculates the picture's difference.*<br>
+captures include all screen, and target window capture.<br>
+*tool calculates the capture's difference.*<br>
 *Therefore, If target windows moved another position, that position adjust.*<br>
 
 <br>
@@ -167,18 +167,18 @@ del or rm command. *(it's simple!)*
 
 |option name|default value|detail|
 |:---|:---|:---|
--list|false|listing window titiles and exit|
+-list|false|listing window titiles and exit<br>use to search target window title.|
 -replay|false|replay mode (true is enable)|
--record|true|recording mode (true is enable)|
--export|output.tsv|export file name|
+-record|true|recording mode (true is enable)<br>default is on(recording mode)|
+-export|output.tsv|export file name<br>**If exists same file name, it's overwriten**.|
 -import|input.tsv|import file name|
 -debug|false|debug mode (true is enable)|
--threshold|0.5|same window threshold|
--move|50|mouse move record threshold|
--try|10|error and try counter|
+-threshold|0.5|same window threshold<br>**The lower the value, the more, select large difference**.<br>If screen size is more larger when it's replay, try value lower.|
+-move|50|mouse move record threshold<br>record the mouse move par this value.<br>When value is lower, recording often.|
+-try|10|error and try counter<br>**In case of wait next screen a while, set value larger**.|
 -wait|100|loop wait Millisecond|
--exitCode|27|recording mode to exit ascii key code|
--tmpDir|tmp|temporary directory name|
+-exitCode|27|recording mode to exit ascii key code<br>ascii code, [please refer this site](http://www9.plala.or.jp/sgwr-t/c_sub/ascii.html).|
+-tmpDir|tmp|temporary directory name<br>save captures to this directory.<br>**If exists same directory name, it's overwriten**.|
 
 # Problem
 
