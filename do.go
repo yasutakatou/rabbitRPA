@@ -485,16 +485,16 @@ func recordingMode(exportFile string) {
 	defer hook.End()
 
 	for ev := range EvChan {
-		foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
-
 		strs := ""
 
 		if actFlag == true {
 			if ev.Kind == 3 { //KeyDown = 3
+				foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 				bufStrs, strs = keyDown(altFlag, int(ev.Rawcode), strs, string(ev.Keychar), bufStrs)
 			}
 
 			if ev.Kind == 4 || ev.Kind == 5 { //KeyHold = 4,KeyUp   = 5
+				foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 				altFlag = keyHoldUp(int(ev.Rawcode), int(ev.Kind), bufStrs, exportFile)
 				if altFlag == 256 {
 					return
@@ -502,6 +502,7 @@ func recordingMode(exportFile string) {
 			}
 
 			if ev.Kind == 9 { //MouseMove  = 9
+				foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 				if moveValCheck(int(ev.X), int(ev.Y)) == true {
 					addMouseMove(int(ev.X), int(ev.Y))
 				}
@@ -509,6 +510,7 @@ func recordingMode(exportFile string) {
 		}
 
 		if ev.Kind == 7 { //MouseHold
+			foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 			addMouseAction(int(ev.Button), int(ev.X), int(ev.Y))
 			actFlag = true
 		}
