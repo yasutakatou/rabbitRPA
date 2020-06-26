@@ -23,7 +23,7 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 
 # features
 
- - one binary (it's not perfect)
+ - **one binary (it's not perfect)**
  - light weight
  - very simple use
  - (Of course) free!
@@ -33,7 +33,6 @@ But, RPA set up is a pain in the ass. I think needs, light weight RPA tool.
 1. one execute file include all binary and dll files.
 2. when execute this, extract execute file for RPA, and OpenCV dll files.
 3. and then, execute RPA binary depend for OpenCV, Your operation recorded or replayed!
-
 
 # algorithm
 
@@ -55,14 +54,14 @@ tool executed and create require files, after follow message.
 ```
 
 until input exit key code, your operation recorded.<br>
-(default exit key code is 27[Escape Key].)<br>
+(default exit key code is **27[Escape Key]**.)<br>
 
 After input exit key code, your operation is recorded tsv file and pictures.<br>
 
 tsv file include target window title, move value mouse, click position.<br>
 pictures include all screen, and target window capture.<br>
-tool calculates the picture's difference.<br>
-Therefore, If target windows moved another position, that position adjust.<br>
+*tool calculates the picture's difference.*<br>
+*Therefore, If target windows moved another position, that position adjust.*<br>
 
 <br>
 
@@ -74,8 +73,8 @@ Replay the operation using the file you just used. set you options. <br>
 rabbitRPA.exe -replay -import=output.tsv
 ```
 
-"-replay" is replay mode option.<br>
-"-import" is exported tsv file for record mode.<br>
+*"-replay"* is replay mode option.<br>
+*"-import"* is exported tsv file for record mode.<br>
 
 ### your record will replay!
 
