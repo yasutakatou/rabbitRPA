@@ -188,6 +188,12 @@ Because search partial of window title.<br>
 When focus some tool, this tool's window title auto changed, this tool can't focus that.<br>
 Then, search partial.<br>
 
+ - Why double click don't record?
+
+This tool depend golang module, and that module detect click count only.<br>
+I mean, When double click want to enable, must detect how long it takes to double click.<br>
+Each PC's specs are different. It's difficult!<br>
+
 # copyright
 
 (Probably) the world's first one file RPA tool impremented by Golang!<br>
