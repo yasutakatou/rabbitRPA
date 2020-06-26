@@ -61,8 +61,8 @@ var (
 	Hashs = []hashData{}
 
 	Debug             bool
-	foreTitle         string
 	LiveExitAsciiCode int
+	foreWindow        string
 	LiveRawcodeChar   string
 	sameThreshold     float32
 	tryCounter        int
@@ -76,6 +76,7 @@ var (
 
 type historyData struct {
 	Device string `json:"Device"`
+	Title  string `json:"Title"`
 	Params string `json:"Params"`
 }
 
@@ -87,7 +88,7 @@ type hashData struct {
 func init() {
 	rand.Seed(time.Now().UnixNano())
 	LiveRawcodeChar = "~"
-	foreTitle = ""
+	foreWindow = ""
 }
 
 func main() {
@@ -100,7 +101,7 @@ func main() {
 	_threshold := flag.Float64("threshold", 0.5, "[-threshold=same window threshold]")
 	_move := flag.Float64("move", 50, "[-move=mouse move record threshold]")
 	_try := flag.Int("try", 10, "[-try=error and try counter]")
-	_wait := flag.Int("wait", 100, "[-wait=loop wait Millisecond]")
+	_wait := flag.Int("wait", 250, "[-wait=loop wait Millisecond]")
 	_exitCode := flag.Int("exitCode", 27, "[-exitCode=recording mode to exit ascii key code]")
 	_tmpDir := flag.String("tmpDir", "tmp", "[-tmpDir=temporary directory name]")
 
@@ -192,12 +193,12 @@ func ImportHistory(params string) bool {
 	s := bufio.NewScanner(file)
 	for s.Scan() {
 		strs := strings.Split(s.Text(), "\t")
-		if len(strs) != 2 {
+		if len(strs) != 3 {
 			fmt.Println("Error: your tsv file broken")
 			History = nil
 			return false
 		}
-		History = append(History, historyData{Device: strs[0], Params: strs[1]})
+		History = append(History, historyData{Device: strs[0], Title: strs[1], Params: strs[2]})
 	}
 	fmt.Println("importFile: ", params)
 	return true
@@ -211,13 +212,12 @@ func replayMode(importFile string) {
 
 	for i := 0; i < len(History); i++ {
 		fmt.Println("Device: ", History[i].Device, "Params: ", History[i].Params)
+		targetHwnd := FocusWindow(History[i].Title, Debug)
+		if ChangeTarget(targetHwnd) == false {
+			fmt.Println("not found title: ", History[i].Title)
+			return
+		}
 		switch History[i].Device {
-		case "active":
-			targetHwnd := FocusWindow(History[i].Params, Debug)
-			if ChangeTarget(targetHwnd) == false {
-				fmt.Println("not found title: ", History[i].Params)
-				return
-			}
 		case "key":
 			SendKey(History[i].Params)
 		case "click", "move":
@@ -269,7 +269,7 @@ func replayMode(importFile string) {
 			if maxConfidence > sameThreshold {
 				actionX := maxLoc.X + targetX
 				actionY := maxLoc.Y + targetY
-				robotgo.MoveMouseSmooth(actionX, actionY, 0.25, 0.25)
+				robotgo.MoveMouseSmooth(actionX, actionY, 0.1, 0.1)
 
 				if History[i].Device == "click" {
 					if strs[4] == "1" {
@@ -284,6 +284,7 @@ func replayMode(importFile string) {
 				}
 			}
 		}
+		time.Sleep(time.Duration(waitSeconds) * time.Millisecond)
 	}
 }
 
@@ -484,6 +485,8 @@ func recordingMode(exportFile string) {
 	defer hook.End()
 
 	for ev := range EvChan {
+		foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
+
 		strs := ""
 
 		if actFlag == true {
@@ -660,13 +663,7 @@ func GetMD5Hash(text string) string {
 
 func addHistory(device, strs string) {
 	if len(strs) > 0 {
-		activeWindow := getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
-		if foreTitle != activeWindow {
-			foreTitle = activeWindow
-			History = append(History, historyData{Device: "active", Params: foreTitle})
-		}
-
-		History = append(History, historyData{Device: device, Params: strs})
+		History = append(History, historyData{Device: device, Title: foreWindow, Params: strs})
 		if Debug == true {
 			fmt.Println("liveRecord: ", strs)
 		}
@@ -815,12 +812,12 @@ func ExportHistory(filename string) bool {
 		strs := ""
 		if History[i].Device == "click" {
 			stra := strings.Split(History[i].Params, ";")
-			strs = History[i].Device + "\t" + stra[0] + ";" + stra[2] + ";" + stra[4] + ";" + stra[5] + ";" + stra[6]
+			strs = History[i].Device + "\t" + History[i].Title + "\t" + stra[0] + ";" + stra[2] + ";" + stra[4] + ";" + stra[5] + ";" + stra[6]
 		} else if History[i].Device == "move" {
 			stra := strings.Split(History[i].Params, ";")
-			strs = History[i].Device + "\t" + stra[0] + ";" + stra[2] + ";" + stra[3]
+			strs = History[i].Device + "\t" + History[i].Title + "\t" + stra[0] + ";" + stra[2] + ";" + stra[3]
 		} else {
-			strs = History[i].Device + "\t" + History[i].Params
+			strs = History[i].Device + "\t" + History[i].Title + "\t" + History[i].Params
 		}
 
 		if Debug == true {
