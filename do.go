@@ -214,15 +214,9 @@ func replayMode(importFile string) {
 	ImportHistory(importFile)
 
 	for i := 0; i < len(History); i++ {
-		fmt.Println("Device: ", History[i].Device, "Params: ", History[i].Params)
-		targetHwnd := FocusWindow(History[i].Pre, Debug)
-		if ChangeTarget(targetHwnd) == false {
-			fmt.Println("not found title: ", History[i].Pre)
-			targetHwnd := FocusWindow(History[i].Aft, Debug)
-			if ChangeTarget(targetHwnd) == false {
-				fmt.Println("not found title: ", History[i].Aft)
-				return
-			}
+		fmt.Println("Device: ", History[i].Device, "Pre: ", History[i].Pre, "Aft: ", History[i].Aft, "Params: ", History[i].Params)
+		if setTargetWindow(i) == false {
+			return
 		}
 		switch History[i].Device {
 		case "key":
@@ -276,7 +270,7 @@ func replayMode(importFile string) {
 			if maxConfidence > sameThreshold {
 				actionX := maxLoc.X + targetX
 				actionY := maxLoc.Y + targetY
-				robotgo.MoveMouseSmooth(actionX, actionY, 0.1, 0.1)
+				robotgo.MoveMouseSmooth(actionX, actionY, 0.01, 0.01)
 
 				if History[i].Device == "click" {
 					if strs[4] == "1" {
@@ -293,6 +287,21 @@ func replayMode(importFile string) {
 		}
 		time.Sleep(time.Duration(waitSeconds) * time.Millisecond)
 	}
+}
+
+func setTargetWindow(i int) bool {
+	if len(History[i].Pre) > 0 {
+		if targetHwnd := FocusWindow(History[i].Pre, Debug); ChangeTarget(targetHwnd) == false {
+			fmt.Println("not found title: ", History[i].Pre)
+			if len(History[i].Aft) > 0 {
+				if targetHwnd := FocusWindow(History[i].Aft, Debug); ChangeTarget(targetHwnd) == false {
+					fmt.Println("not found title: ", History[i].Aft)
+					return false
+				}
+			}
+		}
+	}
+	return true
 }
 
 func getNowFilename() string {
@@ -715,21 +724,20 @@ func ListWindow(Debug bool) []string {
 	return ret
 }
 
-func matchCheck(stra, strb, strc string) bool {
-	if strings.Index(stra, strb) != -1 {
+func matchCheck(stra, strb string) bool {
+	if strings.Index(strb, stra) != -1 {
 		return true
-	} else if strings.Index(strb, stra) != -1 {
-		return true
-	} else if strings.Index(strc, strb) != -1 {
-		return true
-	} else if strings.Index(strb, strc) != -1 {
-		return true
+	} else {
+		if strings.Index(stra, strb) != -1 {
+			return true
+		}
 	}
 	return false
 }
 
 func FocusWindow(title string, Debug bool) uintptr {
 	var hwnd syscall.Handle
+	var rect RECTdata
 
 	cb := syscall.NewCallback(func(h syscall.Handle, p uintptr) uintptr {
 		b := make([]uint16, 200)
@@ -742,13 +750,16 @@ func FocusWindow(title string, Debug bool) uintptr {
 			fmt.Printf("EnumWindows Search '%s' window: handle=0x%x\n", syscall.UTF16ToString(b), h)
 		}
 
-		if matchCheck(fmt.Sprintf("%x", h), title, syscall.UTF16ToString(b)) == true {
+		if matchCheck(title, syscall.UTF16ToString(b)) == true {
 			if Debug == true {
 				fmt.Printf("Found! window: '%s' handle=0x%x\n", syscall.UTF16ToString(b), h)
 			}
-
-			hwnd = h
-			return 0
+			GetWindowRect(HWND(h), &rect, Debug)
+			fmt.Println()
+			if int(rect.Right-rect.Left) > 0 && int(rect.Bottom-rect.Top) > 0 {
+				hwnd = h
+				return 0
+			}
 		}
 		return 1
 	})
