@@ -62,7 +62,8 @@ var (
 
 	Debug             bool
 	LiveExitAsciiCode int
-	foreWindow        string
+	preWindow         string
+	aftWindow         string
 	LiveRawcodeChar   string
 	sameThreshold     float32
 	tryCounter        int
@@ -76,7 +77,8 @@ var (
 
 type historyData struct {
 	Device string `json:"Device"`
-	Title  string `json:"Title"`
+	Pre    string `json:"Pre"`
+	Aft    string `json:"Aft"`
 	Params string `json:"Params"`
 }
 
@@ -88,7 +90,8 @@ type hashData struct {
 func init() {
 	rand.Seed(time.Now().UnixNano())
 	LiveRawcodeChar = "~"
-	foreWindow = ""
+	preWindow = ""
+	aftWindow = ""
 }
 
 func main() {
@@ -193,12 +196,12 @@ func ImportHistory(params string) bool {
 	s := bufio.NewScanner(file)
 	for s.Scan() {
 		strs := strings.Split(s.Text(), "\t")
-		if len(strs) != 3 {
+		if len(strs) != 4 {
 			fmt.Println("Error: your tsv file broken")
 			History = nil
 			return false
 		}
-		History = append(History, historyData{Device: strs[0], Title: strs[1], Params: strs[2]})
+		History = append(History, historyData{Device: strs[0], Pre: strs[1], Aft: strs[2], Params: strs[3]})
 	}
 	fmt.Println("importFile: ", params)
 	return true
@@ -212,10 +215,14 @@ func replayMode(importFile string) {
 
 	for i := 0; i < len(History); i++ {
 		fmt.Println("Device: ", History[i].Device, "Params: ", History[i].Params)
-		targetHwnd := FocusWindow(History[i].Title, Debug)
+		targetHwnd := FocusWindow(History[i].Pre, Debug)
 		if ChangeTarget(targetHwnd) == false {
-			fmt.Println("not found title: ", History[i].Title)
-			return
+			fmt.Println("not found title: ", History[i].Pre)
+			targetHwnd := FocusWindow(History[i].Aft, Debug)
+			if ChangeTarget(targetHwnd) == false {
+				fmt.Println("not found title: ", History[i].Aft)
+				return
+			}
 		}
 		switch History[i].Device {
 		case "key":
@@ -489,30 +496,37 @@ func recordingMode(exportFile string) {
 
 		if actFlag == true {
 			if ev.Kind == 3 { //KeyDown = 3
-				foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 				bufStrs, strs = keyDown(altFlag, int(ev.Rawcode), strs, string(ev.Keychar), bufStrs)
+				preWindow = aftWindow
+				aftWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 			}
 
-			if ev.Kind == 4 || ev.Kind == 5 { //KeyHold = 4,KeyUp   = 5
-				foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
+			if ev.Kind == 4 || ev.Kind == 5 { //KeyHold = 4,KeyUp = 5
 				altFlag = keyHoldUp(int(ev.Rawcode), int(ev.Kind), bufStrs, exportFile)
 				if altFlag == 256 {
 					return
 				}
+				preWindow = aftWindow
+				aftWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 			}
 
 			if ev.Kind == 9 { //MouseMove  = 9
-				foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 				if moveValCheck(int(ev.X), int(ev.Y)) == true {
 					addMouseMove(int(ev.X), int(ev.Y))
 				}
+				preWindow = aftWindow
+				aftWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 			}
 		}
 
 		if ev.Kind == 7 { //MouseHold
-			foreWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
+			if actFlag == false {
+				actFlag = true
+				aftWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
+			}
 			addMouseAction(int(ev.Button), int(ev.X), int(ev.Y))
-			actFlag = true
+			preWindow = aftWindow
+			aftWindow = getHwndToTitle(GetWindow("GetForegroundWindow", false), false)
 		}
 
 	}
@@ -665,7 +679,7 @@ func GetMD5Hash(text string) string {
 
 func addHistory(device, strs string) {
 	if len(strs) > 0 {
-		History = append(History, historyData{Device: device, Title: foreWindow, Params: strs})
+		History = append(History, historyData{Device: device, Pre: preWindow, Aft: aftWindow, Params: strs})
 		if Debug == true {
 			fmt.Println("liveRecord: ", strs)
 		}
@@ -814,12 +828,12 @@ func ExportHistory(filename string) bool {
 		strs := ""
 		if History[i].Device == "click" {
 			stra := strings.Split(History[i].Params, ";")
-			strs = History[i].Device + "\t" + History[i].Title + "\t" + stra[0] + ";" + stra[2] + ";" + stra[4] + ";" + stra[5] + ";" + stra[6]
+			strs = History[i].Device + "\t" + History[i].Pre + "\t" + History[i].Aft + "\t" + stra[0] + ";" + stra[2] + ";" + stra[4] + ";" + stra[5] + ";" + stra[6]
 		} else if History[i].Device == "move" {
 			stra := strings.Split(History[i].Params, ";")
-			strs = History[i].Device + "\t" + History[i].Title + "\t" + stra[0] + ";" + stra[2] + ";" + stra[3]
+			strs = History[i].Device + "\t" + History[i].Pre + "\t" + History[i].Aft + "\t" + stra[0] + ";" + stra[2] + ";" + stra[3]
 		} else {
-			strs = History[i].Device + "\t" + History[i].Title + "\t" + History[i].Params
+			strs = History[i].Device + "\t" + History[i].Pre + "\t" + History[i].Aft + "\t" + History[i].Params
 		}
 
 		if Debug == true {
