@@ -101,7 +101,7 @@ func main() {
 	_exportFile := flag.String("export", "output.tsv", "[-export=export file name]")
 	_importFile := flag.String("import", "input.tsv", "[-import=import file name]")
 	_DEBUG := flag.Bool("debug", false, "[-debug=debug mode (true is enable)]")
-	_threshold := flag.Float64("threshold", 0.5, "[-threshold=same window threshold]")
+	_threshold := flag.Float64("threshold", 0.1, "[-threshold=same window threshold]")
 	_move := flag.Float64("move", 50, "[-move=mouse move record threshold]")
 	_try := flag.Int("try", 10, "[-try=error and try counter]")
 	_wait := flag.Int("wait", 250, "[-wait=loop wait Millisecond]")
