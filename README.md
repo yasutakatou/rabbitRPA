@@ -173,7 +173,7 @@ del or rm command. *(it's simple!)*
 -export|output.tsv|export file name<br>**If exists same file name, it's overwriten**.|
 -import|input.tsv|import file name|
 -debug|false|debug mode (true is enable)|
--threshold|0.5|same window threshold<br>**The lower the value, the more, select large difference**.<br>If screen size is more larger when it's replay, try value lower.|
+-threshold|0.1|same window threshold<br>**The lower the value, the more, select large difference**.<br>If screen size is more larger when it's replay, try value lower.|
 -move|50|mouse move record threshold<br>record the mouse move par this value.<br>When value is lower, recording often.|
 -try|10|error and try counter<br>**In case of wait next screen a while, set value larger**.|
 -wait|250|loop wait Millisecond|
