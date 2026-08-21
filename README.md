@@ -1,3 +1,5 @@
+
+
 # rabbitRPA
 
 ### (Probably) the world's first one file RPA tool impremented by Golang!
@@ -50,7 +52,7 @@ tool executed and create require files, after follow message.
 
 
 ```
- - - recording start! you want to end this mode, key press ascii code (%d) - -
+ - - recording start! you want to end this mode, key press ascii code (27) - -
 ```
 
 until input exit key code, your operation recorded.<br>
